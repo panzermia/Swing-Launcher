@@ -1,0 +1,892 @@
+:root {
+    --background: #000000;
+    --foreground: #eeeeee;
+    --littleOverlay: rgba(255, 255, 255, 0.075);
+    --overlay: rgba(255, 255, 255, 0.1);
+    --bigOverlay: rgba(255, 255, 255, 0.2);
+    --aquamarine: #b4fadc;
+    --lightSea: #a0f1da;
+    --happyBlue: #3ec4d6;
+    --deepOcean: #0377a8;
+    --roseMadder: #e23131;
+    --bronze: #e28431;
+    --lime: #6ed63e;
+    --boxShadow: rgb(155 155 144 / 30%) 0px 4px 29px 0px;
+    --updateBoxShadow: rgb(110 214 62 / 30%) 0px 4px 29px 0px;
+}
+
+[theme="light"] {
+    --background: #ffffff;
+    --foreground: #111111;
+    --littleOverlay: rgba(0, 0, 0, 0.075);
+    --overlay: rgba(0, 0, 0, 0.1);
+    --bigOverlay: rgba(0, 0, 0, 0.2);
+    --boxShadow: rgb(100 100 111 / 30%) 0px 4px 29px 0px;
+}
+
+/* #region BASICS */
+
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--overlay);
+    border-radius: 10px;
+}
+
+* {
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    color: var(--foreground);
+    background-color: var(--background);
+    font-family: montserrat;
+    font-weight: 500;
+    overflow: hidden;
+    user-select: none;
+}
+
+h1 {
+    margin: 0 0 20px 0;
+}
+
+h2 {
+    margin: 0;
+    font-size: 1.3em;
+}
+
+h3 {
+    margin: 0 0 15px 0;
+    font-size: 1.35em;
+}
+
+p {
+    margin: 5px 0 10px 0;
+}
+
+p:last-child {
+    margin-bottom: 0;
+}
+
+img {
+    display: block;
+    -webkit-user-drag: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+button {
+    width: fit-content;
+    padding: 10px 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border: 0;
+    outline: 0;
+    color: var(--background);
+    background-color: var(--happyBlue);
+    border-radius: 10px;
+    opacity: 1;
+    font: inherit;
+    font-weight: bold;
+    filter: unset;
+    cursor: pointer;
+    overflow: hidden;
+    transition: filter 0.4s, opacity 0.4s;
+    z-index: 1;
+}
+
+button::before {
+    content: "";
+    width: 0px;
+    padding-bottom: 0px;
+    position: absolute;
+    background-color: var(--bigOverlay);
+    border-radius: 100vw;
+    transition: width 0.4s, padding-bottom 0.4s;
+    z-index: -1;
+}
+
+button:hover::before {
+    width: 105%;
+    padding-bottom: 105%;
+}
+
+button:disabled {
+    opacity: 0.6;
+    filter: saturate(0) brightness(0.8);
+    cursor: default;
+}
+
+button:disabled:hover::before {
+    width: 0;
+    padding-bottom: 0;
+}
+
+button[snd] {
+    color: var(--foreground);
+    background-color: var(--bigOverlay);
+    backdrop-filter: blur(6px);
+}
+
+input[type="text"], input[type="number"], input[type="password"] {
+    height: 39px;
+    padding: 10px;
+    display: inline-flex;
+    color: var(--foreground);
+    background-color: var(--overlay);
+    border-radius: 5px;
+    overflow-x: overlay;
+    white-space: nowrap;
+}
+
+input[type="checkbox"] {
+    width: 29px;
+    height: 29px;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    visibility: hidden;
+}
+
+input[type="checkbox"]:before {
+    content: "";
+    width: inherit;
+    height: inherit;
+    position: absolute;
+    border-radius: 5px;
+    background-color: var(--littleOverlay);
+    visibility: visible;
+}
+
+input[type="checkbox"]::after {
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    border-radius: 5px;
+    background-color: var(--happyBlue);
+    transition: width 0.2s, height 0.2s;
+    visibility: visible;
+}
+
+input[type="checkbox"]:checked::after {
+    width: inherit;
+    height: inherit;
+}
+
+select {
+    width: 150px;
+    height: 39px;
+    padding: 10px;
+    border: 0;
+    outline: 0;
+    font: inherit;
+    font-weight: bold;
+    border-radius: 5px;
+    color: var(--foreground);
+    background-color: var(--overlay);
+}
+
+option {
+    background-color: var(--background);
+}
+
+icon {
+    display: flex;
+    fill: var(--foreground);
+}
+
+pbar {
+    width: 100%;
+    height: 5px;
+    display: block;
+    background-color: var(--bigOverlay);
+    border-radius: 100vw;
+    --value: 0%;
+}
+
+pbar::before, pbar[indeterminate]::after {
+    content: "";
+    width: var(--value);
+    height: inherit;
+    display: inherit;
+    background-color: var(--happyBlue);
+    border-radius: inherit;
+    transition: width 0.2s;
+}
+
+pbar[indeterminate]::before {
+    position: absolute;
+    background-color: var(--happyBlue);
+    animation: pbarBefore 2s infinite;
+}
+
+pbar[indeterminate]::after {
+    position: absolute;
+    background-color: var(--happyBlue);
+    animation: pbarAfter 2s 0.5s infinite;
+}
+
+#app {
+    width: 100vw;
+    height: 100vh;
+}
+
+/* #endregion */
+
+/* #region APP FRAME */
+
+#frameBar {
+    height: 40px;
+    width: 100vw;
+    padding: 7.5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    -webkit-app-region: drag;
+}
+
+#frameBar > div {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+}
+
+#frameBar > div > img {
+    height: 19px;
+    margin: 0 10px 0 4px;
+    -webkit-app-region: no-drag;
+}
+
+#frameBar > div > div {
+    width: 25px;
+    height: 25px;
+    margin-left: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border-radius: 5px;
+    cursor: pointer;
+    overflow: hidden;
+    -webkit-app-region: no-drag;
+}
+
+#frameBar > div > div::before {
+    content: "";
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    border-radius: 100vw;
+    transition: width 0.4s, height 0.4s;
+    z-index: -1;
+}
+
+#frameBar > div > div:hover::before {
+    width: 35px;
+    height: 35px;
+}
+
+#frameBar > div > div:first-child {
+    margin-left: 0;
+}
+
+#minimizeCircle::before {
+    background-color: var(--bronze);
+}
+
+#closeCircle::before {
+    background-color: var(--roseMadder);
+}
+
+#frameBar > div > div > icon {
+    width: 20px;
+    transition: fill 0.4s;
+}
+
+#frameBar > div > div:hover > icon {
+    fill: var(--background);
+}
+
+/* #endregion */
+
+/* #region APP CONTENT */
+
+#appContent {
+    height: calc(100% - 40px);
+    display: flex;
+    flex-direction: row;
+}
+
+#appSidebar {
+    height: 100%;
+    min-width: 125px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 1;
+    transition: opacity 0.4s;
+}
+
+#appSidebar[disabled] {
+    opacity: 0.5;
+}
+
+.sidebarOption {
+    width: 100%;
+    height: 90px;
+    margin-bottom: 10px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--littleOverlay);
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+#appSidebar[disabled] > .sidebarOption {
+    cursor: unset;
+}
+
+.sidebarOption:last-child {
+    margin-bottom: 0;
+}
+
+.sidebarOption::before {
+    content: "";
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    border-radius: 100vw;
+    background-color: var(--overlay);
+    transition: width 0.4s, height 0.4s;
+}
+
+.sidebarOption > icon {
+    width: 40%;
+    transform: translateY(0px);
+    transition: transform 0.4s;
+}
+
+.sidebarOption > span {
+    position: absolute;
+    opacity: 0;
+    transform: translateY(0px);
+    transition: transform 0.4s, opacity 0.2s;
+}
+
+.sidebarOption:hover > icon, .sidebarOption.selected > icon {
+    transform: translateY(-14px);
+}
+
+.sidebarOption:hover > span, .sidebarOption.selected > span {
+    opacity: 1;
+    transform: translateY(22px);
+    transition: transform 0.4s, opacity 0.2s 0.2s;
+}
+
+#appSidebar[disabled] > .sidebarOption:hover > icon, #appSidebar[disabled] > .sidebarOption.selected > icon {
+    transform: unset;
+}
+
+#appSidebar[disabled] > .sidebarOption:hover > span, #appSidebar[disabled] > .sidebarOption.selected > span {
+    opacity: 0;
+    transform: unset;
+}
+
+.sidebarOption.selected::before {
+    width: 135px;
+    height: 135px;
+}
+
+#appTab {
+    width: 100%;
+    height: 100%;
+    background-color: var(--littleOverlay);
+    border-radius: 10px 0 0 0;
+    overflow: hidden;
+}
+
+#appTab > div {
+    width: 100%;
+    height: 100%;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    opacity: 1;
+    overflow: hidden overlay;
+    transition: opacity 0.2s;
+}
+
+.topPbar {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: unset;
+}
+
+.productContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.productContainer > p {
+    font-weight: bold;
+}
+
+.productContainer > div {
+    width: 48.5%;
+    margin-bottom: 25px;
+    border-radius: 10px;
+    box-shadow: var(--boxShadow);
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.productContainer > div[update] {
+    box-shadow: var(--updateBoxShadow);
+}
+
+.productContainer > div:nth-last-child(-n+2) {
+    margin-bottom: 0;
+}
+
+.productContainer > div > img {
+    width: 100%;
+}
+
+.productContainer > div > div {
+    padding: 15px;
+}
+
+.productContainer > div[update] > div > p {
+    color: var(--lime);
+}
+
+/* #endregion */
+
+/* #region ITEM PANEL */
+
+#itemHeader {
+    display: flex;
+    justify-content: space-between;
+}
+
+#itemHeader > div {
+    position: relative;
+}
+
+#itemMore {
+    width: 39px;
+    height: 39px;
+    cursor: pointer;
+    fill: var(--foreground);
+}
+
+#contextMenu {
+    width: 200px;
+    height: 165px;
+    margin-top: 5px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 0;
+    max-width: 0;
+    max-height: 0;
+    background-color: var(--bigOverlay);
+    border-radius: 10px;
+    box-shadow: var(--boxShadow);
+    transition: max-width 0.4s, max-height 0.4s, padding 0.4s;
+    backdrop-filter: blur(6px);
+}
+
+#contextMenu[unrestorable] {
+    height: 85px;
+}
+
+#contextMenu > div {
+    margin-bottom: 5px;
+    padding: 5px;
+    display: none;
+    align-items: center;
+    min-height: 35px;
+    font-weight: bold;
+    opacity: 0;
+    cursor: pointer;
+    transition: opacity 0.2s, background-color 0.2s;
+}
+
+#contextMenu > div:hover {
+    border-radius: 5px;
+    background-color: var(--overlay);
+}
+
+#contextMenu > div:last-child {
+    margin-bottom: 0;
+}
+
+#contextMenu > div > icon {
+    height: 25px;
+    margin-right: 8px;
+}
+
+#contextUninstall {
+    color: var(--roseMadder);
+}
+
+#contextUninstall > icon {
+    fill: var(--roseMadder);
+}
+
+#itemContent {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#itemContent > div:first-child {
+    width: 55%;
+    height: calc(100% - 70px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#itemDescription {
+    min-height: 38px;
+}
+
+#itemContent > div:first-child > div:first-child > div {
+    margin-top: 45px;
+}
+
+.detail {
+    margin-top: 0;
+    font-weight: bold;
+}
+
+.detail > span {
+    font-weight: 500;
+}
+
+#itemButtons {
+    display: flex;
+}
+
+#itemButtons > button {
+    margin-right: 10px;
+}
+
+#itemButtons > button:last-child {
+    margin-right: 0;
+}
+
+#itemContentBottomBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#itemContentBottomBar > div {
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.8s;
+}
+
+#itemContentBottomBar > div > div {
+    display: flex;
+    justify-content: space-between;
+}
+
+#itemContentBottomBar > div > div {
+    font-weight: bold;
+}
+
+#itemContentBottomBar > div > div > div {
+    display: flex;
+    justify-content: flex-end;
+    opacity: 0;
+    transition: opacity 0.8s;
+}
+
+#itemSpeed {
+    width: 140px;
+    text-align: right;
+}
+
+#itemEta {
+    width: 110px;
+    margin-left: 20px;
+    text-align: right;
+}
+
+#itemButton {
+    min-width: 20%;
+    margin-left: 50px;
+}
+
+#itemBanner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0.4;
+    z-index: -1;
+}
+
+#itemBanner > img {
+    height: 100%;
+}
+
+#goToItem {
+    display: none;
+}
+
+/* #endregion */
+
+/* #region SETTINGS PANEL */
+
+#settingsPanel p {
+    margin: 0;
+}
+
+#settingsPanel > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+#settingsPanel > div > div {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+#settingsPanel > footer {
+    height: 100%;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    color: var(--foreground);
+}
+
+#settingsPanel > footer {
+    font-weight: bold;
+}
+
+/* #endregion */
+
+/* #region POPUPS */
+
+#popups {
+    width: 100vw;
+    height: calc(100vh - 40px);
+    position: absolute;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transition: opacity 0.2s;
+    backdrop-filter: blur(6px);
+    z-index: 10;
+}
+
+#popups > div {
+    width: 40%;
+    max-height: 460px;
+    display: none;
+    padding: 20px;
+    background-color: var(--background);
+    border-radius: 15px;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: opacity 0.2s, transform 0.4s;
+}
+
+#popups > div > h1 {
+    margin: 0 0 10px 0;
+}
+
+#popups > div > button {
+    float: right;
+}
+
+#popups > div > div {
+    max-height: 300px;
+    margin: 10px 0 20px 0;
+    padding: 10px;
+    background-color: var(--overlay);
+    border-radius: 10px;
+    overflow: overlay;
+}
+
+#popups > div > div h2 {
+    margin-bottom: 15px;
+    font-size: 1.8em;
+}
+
+#popups > div > div ul {
+    padding-left: 10px;
+    margin: 10px 0 30px 0;
+    list-style: none;
+}
+
+#popups > div > div ul:last-child {
+    margin-bottom: 0;
+}
+
+#popups > div > div ul > li {
+    margin: 5px 0;
+    font-size: 15px;
+}
+
+#popups > div > div ul > li:first-child {
+    margin-top: 0;
+}
+
+#popups > div > div ul > li:last-child {
+    margin-bottom: 0;
+}
+
+#popups > div > div ul > li:before {
+    content: "•";
+    font-size: 1.3em;
+    font-weight: 900;
+    margin-right: 10px;
+}
+
+#popups > div > div.buttons {
+    max-height: none;
+    padding: 0;
+    margin: 15px 0 0 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: unset;
+    border-radius: 0;
+    overflow: unset;
+}
+
+#popups > div > div.buttons > button {
+    margin-right: 10px;
+}
+
+#popups > div > div.buttons > button:last-child {
+    margin-right: 0;
+}
+
+/* #endregion */
+
+/* #region SPLASH */
+
+#splash {
+    width: 100vw;
+    height: 100vh;
+    padding: 20px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    -webkit-app-region: drag;
+}
+
+#splash > div > img {
+    width: 50px;
+}
+
+#splash > div > p {
+    margin: 20px 0 0 0;
+    font-weight: bold;
+}
+
+#splash > div > pbar {
+    width: 100px;
+    margin-top: 10px;
+    transition: opacity 0.2s;
+}
+
+#splash > img {
+    height: 100%;
+    position: absolute;
+    left: 0;
+}
+
+/* #endregion */
+
+/* #region RULES */
+
+@font-face {
+    font-family: montserrat;
+    src: url("./montserrat.ttf");
+    font-weight: 1 999;
+    font-style: normal;
+}
+
+@keyframes pbarBefore {
+    from {
+        left: -5%;
+        width: 5%;
+    }
+    to {
+        left: 130%;
+        width: 100%;
+    }
+}
+
+@keyframes pbarAfter {
+    from {
+        left: -80%;
+        width: 80%;
+    }
+    to {
+        left: 110%;
+        width: 10%;
+    }
+}
+
+@keyframes hueRotate {
+    from {
+        filter: hue-rotate(0deg);
+    }
+    to {
+        filter: hue-rotate(360deg);
+    }
+}
+
+/* #endregion */

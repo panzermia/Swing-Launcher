@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="Content-Security-Policy" content="script-src 'self'; img-src 'self' https://cdn.cloudflare.steamstatic.com">
+        <link rel="stylesheet" href="./assets/style.css">
+        <title>Swing Launcher</title>
+    </head>
+    <body>
+        <div id="app">
+            <div id="frameBar">
+                <div>
+                    <img src="./assets/logoCompact.png">
+                    <span>Swing Launcher</span>
+                </div>
+                <div>
+                    <div id="minimizeCircle">
+                        <icon name="minimize"></icon>
+                    </div>
+                    <div id="closeCircle">
+                        <icon name="close"></icon>
+                    </div>
+                </div>
+            </div>
+            <div id="appContent">
+                <div id="popups">
+                    <div id="alertPopup">
+                        <h1>null</h1>
+                        <p>null</p>
+                        <button>Okay</button>
+                    </div>
+                    <div id="askPopup">
+                        <h1>null</h1>
+                        <p>null</p>
+                        <div class="buttons">
+                            <button>Yes</button>
+                            <button snd>No</button>
+                        </div>
+                    </div>
+                    <div id="changelogPopup">
+                        <h1>null</h1>
+                        <div></div>
+                        <button>Okay</button>
+                    </div>
+                    <div id="crashPopup">
+                        <h1>null</h1>
+                        <p>null</p>
+                        <div></div>
+                        <button>Okay</button>
+                    </div>
+                </div>
+                <div id="appSidebar">
+                    <a class="sidebarOption selected" goto="playPanel">
+                        <icon name="play"></icon>
+                        <span>Play</span>
+                    </a>
+                    <a class="sidebarOption" goto="libraryPanel">
+                        <icon name="library"></icon>
+                        <span>Library</span>
+                    </a>
+                    <a class="sidebarOption" goto="settingsPanel">
+                        <icon name="settings"></icon>
+                        <span>Settings</span>
+                    </a>
+                </div>
+                <div id="appTab">
+                    <div id="playPanel">
+                        <pbar id="playLoading" class="topPbar" indeterminate></pbar>
+                        <h1>Play</h1>
+                        <div id="playItems" class="productContainer"></div>
+                    </div>
+                    <div id="libraryPanel">
+                        <pbar id="libraryLoading" class="topPbar" indeterminate></pbar>
+                        <h1>Library</h1>
+                        <div id="libraryItems" class="productContainer"></div>
+                    </div>
+                    <div id="itemPanel">
+                        <div id="itemHeader">
+                            <h1>null</h1>
+                            <div>
+                                <icon id="itemMore" name="more"></icon>
+                                <div id="contextMenu">
+                                    <div id="contextBackup">
+                                        <icon name="backup"></icon>
+                                        <span>Backup</span>
+                                    </div>
+                                    <div id="contextRestore">
+                                        <icon name="restore"></icon>
+                                        <span>Restore</span>
+                                    </div>
+                                    <div id="contextDisable">
+                                        <icon name="pause"></icon>
+                                        <span>Disable Mod</span>
+                                    </div>
+                                    <div id="contextUninstall">
+                                        <icon name="uninstall"></icon>
+                                        <span>Uninstall Mod</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="itemContent">
+                            <div>
+                                <div>
+                                    <p id="itemDescription">null</p>
+                                    <div>
+                                        <h3>Details</h3>
+                                        <p id="itemVersion" class="detail">Version: <span>null</span></p>
+                                        <p id="itemSize" class="detail">Size: <span>null</span></p>
+                                        <p id="itemRelease" class="detail">Release Date: <span>null</span></p>
+                                    </div>
+                                </div>
+                                <div id="itemButtons">
+                                    <button id="itemChangelog" snd>Changelog</button>
+                                    <button id="itemSupport" snd>Support</button>
+                                </div>
+                            </div>
+                            <div id="itemContentBottomBar">
+                                <div>
+                                    <div>
+                                        <p id="itemStatus">Loading</p>
+                                        <div>
+                                            <p id="itemSpeed" class="detail">Speed: <span>0 MB/s</span></p>
+                                            <p id="itemEta" class="detail">ETA: <span>0 sec</span></p>
+                                        </div>
+                                    </div>
+                                    <pbar id="itemProgress"></pbar>
+                                </div>
+                                <button id="itemButton"></button>
+                            </div>
+                        </div>
+                        <div id="itemBanner">
+                            <img>
+                        </div>
+                        <a id="goToItem" goto="itemPanel"></a>
+                    </div>
+                    <div id="settingsPanel">
+                        <h1>Settings</h1>
+                        <div>
+                            <p>Launcher Appearance</p>
+                            <select id="settingsAppearance">
+                                <option value="1">Dark</option>
+                                <option value="0">Light</option>
+                            </select>
+                        </div>
+                        <footer>
+                            <p>Version <span id="settingsVersion">null</span></p>
+                        </footer>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
