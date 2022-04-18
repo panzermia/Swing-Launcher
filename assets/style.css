@@ -639,12 +639,12 @@ pbar[indeterminate]::after {
 }
 
 #itemSpeed {
-    width: 140px;
+    width: 150px;
     text-align: right;
 }
 
 #itemEta {
-    width: 110px;
+    width: 115px;
     margin-left: 20px;
     text-align: right;
 }

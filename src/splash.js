@@ -16,7 +16,7 @@ window.addEventListener("load", async () => {
         document.body.setAttribute("theme", "light");
 
     try {
-        await axios.get("https://google.com", { timeout: 3000 });
+        await axios.get("https://1.1.1.1/", { timeout: 3000 });
 
         if (!navigator.onLine)
             throw new Error();

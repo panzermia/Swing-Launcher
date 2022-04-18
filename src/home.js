@@ -144,8 +144,10 @@ window.addEventListener("load", () => {
     document.getElementById("itemSupport").addEventListener("click", () => shell.openExternal(utils.getProductDataById(document.getElementById("goToItem").innerText).support));
 
     document.getElementById("itemButton").addEventListener("click", async () => {
-        if (document.getElementById("itemButton").innerText == "Install" || document.getElementById("itemButton").innerText == "Update")
-            utils.installProduct();
+        if (document.getElementById("itemButton").innerText == "Install")
+            utils.installProduct(false);
+        else if (document.getElementById("itemButton").innerText == "Update")
+            utils.installProduct(true);
         else if (document.getElementById("itemButton").innerText == "Play" || document.getElementById("itemButton").innerText == "Play Disabled") {
             document.getElementById("itemButton").disabled = true;
             utils.playProduct(document.getElementById("itemButton").innerText == "Play Disabled");

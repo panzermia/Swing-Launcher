@@ -214,6 +214,23 @@ ipcMain.on("InstallProduct", async (_, pData, pPath) => {
     }
 });
 
+ipcMain.on("UpdateProduct", async (event, pData, pPath) => {
+    try {
+        for (const task of pData.update) {
+            let args = task.split(" ");
+            args[1] = expandPath(args[1], pPath);
+
+            if (fs.existsSync(args[1]))
+                fs.unlinkSync(args[1]);
+        }
+        
+        event.returnValue = [true, null];
+    }
+    catch (err) {
+        event.returnValue = [false, err];
+    }
+});
+
 ipcMain.on("DisableEnableProduct", async (_, disable, pData, pPath) => {
     try {
         for (const task of pData.disable) {

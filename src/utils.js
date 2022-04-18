@@ -153,7 +153,7 @@ async function expandPath(path, pPath) {
     return await ipcRenderer.sendSync("ExpandPath", path, pPath);
 }
 
-async function installProduct() {
+async function installProduct(update) {
     let pData = getProductDataById(document.querySelector("#itemContent > div > button").getAttribute("pid")), gamePath = null;
 
     console.log("Starting to download the product " + pData.id);
@@ -187,28 +187,50 @@ async function installProduct() {
             try {
                 steamPath = (await regedit.promisified.list("HKLM\\SOFTWARE\\Valve\\Steam"))["HKLM\\SOFTWARE\\Valve\\Steam"].values.InstallPath.value.replace(/\\/g, "/");
             }
-            catch {
+            catch (err) {
                 showPopUp("alertPopup", "Error", "Looks like there was a problem detecting your Steam installation. Try to repair it and try again.");
-                console.error("The Steam path wasn't found on regedit");
+                console.error("The Steam path wasn't found on regedit: " + err);
                 unlockLauncher();
                 return;
             }
         }
 
-        libraryObj = vdfplus.parse(fs.readFileSync(steamPath + "/config/libraryfolders.vdf", "utf8"));
-        for (let i = 0; i < Object.keys(libraryObj.libraryfolders).length - 1; i++) {
-            if (Object.keys(libraryObj.libraryfolders[String(i)].apps).includes(String(pData.id))) {
-                gamePaths[String(pData.id)] = gamePath = libraryObj.libraryfolders[String(i)].path.replace(/\\\\/g, "/") + "/steamapps/common/" + pData.path;
-                setSetting("gamePaths", gamePaths);
-                break;
+        try {
+            libraryObj = vdfplus.parse(fs.readFileSync(steamPath + "/config/libraryfolders.vdf", "utf8"));
+            for (const key of Object.keys(libraryObj.libraryfolders)) {
+                if (Number(key) != NaN && Object.keys(libraryObj.libraryfolders[key].apps).includes(String(pData.id))) {
+                    gamePaths[String(pData.id)] = gamePath = libraryObj.libraryfolders[key].path.replace(/\\\\/g, "/") + "/steamapps/common/" + pData.path;
+                    setSetting("gamePaths", gamePaths);
+                    break;
+                }
+            }
+            if (gamePath == null) {
+                showPopUp("alertPopup", "Error", "Looks like there was a problem detecting your game installation. Check if you have the game installed from the store and try again.");
+                console.error("Game path couldn't be found on the store files");
+                unlockLauncher();
+                return;
             }
         }
-        if (gamePath == null) {
-            showPopUp("alertPopup", "Error", "Looks like there was a problem detecting your game installation. Check if you have the game installed from the store and try again.");
-            console.error("Game path couldn't be found on the store files");
+        catch (err) {
+            showPopUp("alertPopup", "Error", "Looks like there was a problem accessing a required Steam file. Check if your Steam installation is not corrupted and try again.");
+            console.error("Error accessing Steam file: " + err);
             unlockLauncher();
-            return; 
+            return;
         }
+    }
+
+    if (update) {
+        console.log("Update started");
+
+        let preUpdate = ipcRenderer.sendSync("UpdateProduct", pData, gamePath);
+        if (!preUpdate[0]) {
+            showPopUp("crashPopup", "Error", "Something happened while updating this product:", preUpdate[1]);
+            console.error("There was an error while updating this product: " + preUpdate[1]);
+            unlockLauncher();
+            return;
+        }
+
+        console.log("Updating complete!");
     }
 
     console.log("Download started");
@@ -315,9 +337,9 @@ async function playProduct(disabled) {
         try {
             steamPath = (await regedit.promisified.list("HKLM\\SOFTWARE\\Valve\\Steam"))["HKLM\\SOFTWARE\\Valve\\Steam"].values.InstallPath.value.replace(/\\/g, "/");
         }
-        catch {
+        catch (err) {
             showPopUp("alertPopup", "Error", "Looks like there was a problem detecting your Steam installation. Try to repair it and try again.");
-            console.error("The Steam path wasn't found on regedit");
+            console.error("The Steam path wasn't found on regedit: " + err);
             return;
         }
     }
